@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/miguelmatg/requestflow-feedback/discussions
+    about: Use Discussions for open questions and brainstorming.
+  - name: Security vulnerability report
+    url: https://github.com/miguelmatg/requestflow-feedback/security/policy
+    about: Please do not report security issues in public tickets.

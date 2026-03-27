@@ -10,16 +10,16 @@
 
 ## Suggested labels
 
-- type: bug
-- type: enhancement
-- type: docs
-- status: needs-triage
-- status: needs-info
-- status: accepted
-- status: closed-not-planned
-- priority: p1
-- priority: p2
-- priority: p3
+- bug
+- enhancement
+- documentation
+- needs-triage
+- needs-info
+- accepted
+- closed-not-planned
+- priority-p1
+- priority-p2
+- priority-p3
 
 ## Response style
 

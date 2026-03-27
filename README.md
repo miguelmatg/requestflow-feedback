@@ -3,12 +3,14 @@
 Public community space for RequestFlow feedback.
 
 This repository is for:
+
 - Bug reports
 - Improvement proposals
 - Product feedback
 - Community discussions
 
 This repository is not for:
+
 - Source code
 - External pull requests
 
@@ -16,8 +18,8 @@ This repository is not for:
 
 - Marketplace: https://marketplace.visualstudio.com/items?itemName=requestflow.requestflow
 - Discussions: https://github.com/miguelmatg/requestflow-feedback/discussions
-- Report a bug: open a Bug report issue
-- Suggest an improvement: open an Improvement request issue
+- Report a bug: https://github.com/miguelmatg/requestflow-feedback/issues/new?template=bug_report.yml
+- Suggest an improvement: https://github.com/miguelmatg/requestflow-feedback/issues/new?template=improvement_request.yml
 - Security policy: see SECURITY.md
 
 ## Scope

@@ -5,8 +5,8 @@
 Do not post security vulnerabilities in public issues or discussions.
 
 Please report vulnerabilities through one of these channels:
+
 - GitHub Security Advisory (preferred)
-- Email: security@requestflow.dev
 
 ## What to include
 

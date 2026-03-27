@@ -1,0 +1,39 @@
+name: Improvement request
+description: Suggest an improvement or new capability
+labels:
+  - enhancement
+  - needs-triage
+title: "[Improvement]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your idea. Help us understand the user value and expected outcome.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What problem are you trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe your suggested solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any workarounds or alternatives you tried
+    validations:
+      required: false
+  - type: textarea
+    id: impact
+    attributes:
+      label: Expected impact
+      description: Who benefits and how?
+    validations:
+      required: true

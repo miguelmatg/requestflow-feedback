@@ -2,6 +2,14 @@
 
 Public community space for RequestFlow feedback.
 
+<p align="center">
+	<img src="assets/logo.png" alt="RequestFlow Logo" width="128" />
+</p>
+
+<p align="center">
+	<img src="assets/preview.jpg" alt="RequestFlow Preview" width="800" />
+</p>
+
 This repository is for:
 
 - Bug reports

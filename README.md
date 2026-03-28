@@ -25,6 +25,8 @@ This repository is not for:
 ## Quick links
 
 - Marketplace: https://marketplace.visualstudio.com/items?itemName=requestflow.requestflow
+- Official app README (English): https://github.com/miguelmatg/requestflow-feedback/blob/main/README.app.md
+- Official app README (Spanish): https://github.com/miguelmatg/requestflow-feedback/blob/main/README.app.es.md
 - Discussions: https://github.com/miguelmatg/requestflow-feedback/discussions
 - Report a bug: https://github.com/miguelmatg/requestflow-feedback/issues/new?template=bug_report.yml
 - Suggest an improvement: https://github.com/miguelmatg/requestflow-feedback/issues/new?template=improvement_request.yml

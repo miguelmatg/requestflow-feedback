@@ -16,7 +16,12 @@
   <img src="https://raw.githubusercontent.com/miguelmatg/requestflow-feedback/main/assets/preview.jpg" alt="RequestFlow Preview" width="800" />
 </p>
 
-RequestFlow guarda tus requests HTTP como archivos `.http` nativos en tu repositorio, junto con archivos específicos por protocolo para MQTT/WS. Tu agente de código puede leer esa estructura y generar, actualizar o completar requests automáticamente — sin copiar y pegar, sin herramientas externas.
+RequestFlow guarda tus requests HTTP como archivos `.http` nativos en tu repositorio. Tu agente de código puede leer esa estructura y generar, actualizar o completar requests automáticamente — sin copiar y pegar, sin herramientas externas.
+
+## Estado del release
+
+- v2.0.0 es una versión enfocada solo en HTTP.
+- MQTT, WebSocket y la UI de Entornos están ocultos intencionalmente en esta versión y regresan en fases siguientes.
 
 ## README publico (todos los idiomas)
 
@@ -25,21 +30,19 @@ RequestFlow guarda tus requests HTTP como archivos `.http` nativos en tu reposit
 
 ## ¿Por qué RequestFlow?
 
-- **Nativo del proyecto** — tus requests HTTP viven como `.http` y la configuración del workspace en `.requestsflow/`. Versionalo, compártelo, revísalo en PRs.
+- **Nativo del proyecto** — cada raíz de API guarda `.http` y su propia estructura de RequestFlow dentro del repo. Versionalo, compártelo y revísalo en PRs.
 - **Preparado para LLM** — genera docs estructuradas que tu agente IA lee para entender tus APIs, y después crea o actualiza requests por controlador.
 - **Cero cambio de contexto** — envía e inspecciona requests HTTP sin salir de tu editor.
-- **Listo para equipos** — comparte colecciones y entornos por control de versiones. Mantén secretos fuera del repo con entornos privados gitignoreados.
-- **Entornos por API** — asigna un entorno activo diferente a cada API. Variables compartidas de equipo con secretos personales que quedan locales.
-- **MQTT integrado** — conéctate a brokers, suscríbete, publica y monitoriza mensajes junto a tu flujo HTTP.
-- **WebSocket integrado** — crea conexiones WS, conecta/desconecta, envía payloads y revisa mensajes entrantes/salientes.
+- **Listo para equipos** — comparte colecciones por control de versiones y revisa requests en PRs.
+- **UX enfocada** — alcance HTTP-only en v2.0.0 para máxima estabilidad y menor fricción inicial.
 - **Funciona donde programas** — VS Code, Cursor, Windsurf y otros IDEs basados en VS Code.
 
 ## Funcionalidades
 
 ### HTTP
 
-- Gestiona múltiples APIs dentro de `.requestsflow/`.
-- Organiza endpoints por carpetas y colecciones.
+- Trata cada API como una raíz gestionada.
+- Organiza requests HTTP dentro de `requests/` con carpetas por controlador o funcionalidad.
 - Envía requests con `GET`, `POST`, `PUT`, `PATCH`, `DELETE`.
 - Configura headers, params, body y auth (`Bearer`, `Basic`, `API Key`).
 - Visualiza respuesta: status, headers, body (con vista de árbol JSON colapsable), tiempo, tamaño y exportación cURL.
@@ -53,28 +56,11 @@ RequestFlow guarda tus requests HTTP como archivos `.http` nativos en tu reposit
 - Conserva historial de respuestas en sesión (últimas 20 ejecuciones por bloque).
 - Incluye ayudas de migración: importar entornos de REST Client y centralizar archivos standalone.
 
-### Entornos
+### Nota de roadmap de modulos
 
-- Entornos globales, por API y personales con variables reutilizables.
-- Interpolación de variables con sintaxis `{{variable}}`.
-- Selección de entorno por API — asigna un entorno activo diferente a cada API con fallback global.
-- Entornos privados (gitignoreados) para secretos y overrides locales — cada miembro del equipo mantiene el suyo.
-- File watcher auto-refresca variables en pestañas abiertas cuando cambian los archivos de entorno.
-- Cambia el entorno activo desde la barra de estado o inline desde el editor de requests.
-
-### MQTT
-
-- Crea brokers inline desde el panel MQTT — sin wizard multi-paso.
-- Suscríbete a topics con soporte de wildcards (`+`, `#`).
-- Publica mensajes con payloads JSON, XML, YAML o raw.
-- Log de mensajes en tiempo real con burbujas de alto contraste y visualización en árbol de topics.
-
-### WebSocket
-
-- Panel WebSocket dedicado con vista general de conexiones y creación inline.
-- Configura URL, headers y mensaje inicial por conexión.
-- Conecta, desconecta, envía payloads y visualiza mensajes inbound/outbound/system.
-- Filtra y limpia mensajes desde la sesión integrada de WS.
+- Entornos vuelve en v2.1.0.
+- WebSocket vuelve en v2.3.0.
+- MQTT vuelve en v2.4.0.
 
 ### Integración LLM
 
@@ -92,9 +78,9 @@ RequestFlow guarda tus requests HTTP como archivos `.http` nativos en tu reposit
 
 1. Abre una carpeta de workspace en tu IDE.
 2. Abre **RequestFlow** en la barra lateral.
-3. Haz clic en **Inicializar RequestFlow** para crear `.requestsflow/`.
-4. Agrega APIs, crea requests y selecciona un entorno.
-5. Haz clic en **Generar docs LLM** para que tu agente IA entienda tu proyecto.
+3. Haz clic en **Inicializar RequestFlow** para crear tu primera raíz de API.
+4. Agrega raíces de API y crea requests dentro de `requests/`.
+5. Envía requests y itera directamente desde el panel HTTP.
 
 Tip: puedes cambiar la raíz gestionada con la configuración `requestflow.rootDirectory`.
 
@@ -122,27 +108,32 @@ Tip: puedes cambiar la raíz gestionada con la configuración `requestflow.rootD
 
 ## Estructura del proyecto
 
+Ejemplo de repo simple:
+
 ```plaintext
 <requestflow-root>/                   # por defecto: .requestsflow (configurable)
-├── environments/
-│   └── local.env.json
-├── personal-environments/          # privado (gitignoreado)
-├── _mqtt/
-│   └── mi-broker.mqtt.json
-├── llm/                            # generado para agentes IA
-│   ├── llm.md
-│   ├── http.llm.md
-│   ├── mqtt.llm.md
-│   ├── ws.llm.md
-│   └── environments.llm.md
-├── _websocket/
-│   └── echo-test.ws
-├── <api>/
-│   ├── _environments/
-│   └── <carpetas>/<request>.http
-├── .gitignore
-└── settings.json
+├── settings.json
+├── requests/
+│   └── list-all.http
+└── .gitignore
 ```
+
+Ejemplo de monorepo:
+
+```plaintext
+.requestsflow/                      # raíz compartida opcional
+├── settings.json
+└── requests/
+
+apps/payments/.requestsflow/
+├── settings.json
+├── requests/
+│   └── orders/
+│       └── create.http
+└── .gitignore
+```
+
+Las carpetas dentro de `requests/` solo organizan requests. No son APIs.
 
 ## Licencia
 

@@ -15,7 +15,12 @@
   <img src="https://raw.githubusercontent.com/miguelmatg/requestflow-feedback/main/assets/preview.jpg" alt="RequestFlow Preview" width="800" />
 </p>
 
-RequestFlow keeps your HTTP requests as native `.http` files in your repository, plus protocol-specific files for MQTT/WS. Your coding agent can read that structure and generate, update, or complete requests automatically — no copy-paste, no external tools.
+RequestFlow keeps your HTTP requests as native `.http` files in your repository. Your coding agent can read that structure and generate, update, or complete requests automatically — no copy-paste, no external tools.
+
+## Release status
+
+- v2.0.0 is a focused HTTP-only release.
+- MQTT, WebSocket, and Environments UI are intentionally hidden in this version and return in later phases.
 
 ## Public README (all languages)
 
@@ -24,21 +29,19 @@ RequestFlow keeps your HTTP requests as native `.http` files in your repository,
 
 ## Why RequestFlow?
 
-- **Project-native** — your HTTP requests are plain `.http` files and workspace config lives in `.requestsflow/`. Version it, share it, review it in PRs.
+- **Project-native** — each API root stores plain `.http` files plus its own RequestFlow structure inside your repo. Version it, share it, review it in PRs.
 - **LLM-ready** — generate structured docs that your AI agent reads to understand your APIs, then let it create or update requests by controller.
 - **Zero context switching** — send and inspect HTTP requests without leaving your editor.
-- **Team-ready** — share collections and environments via source control. Keep secrets out of the repo with gitignored private environments.
-- **Per-API environments** — assign a different active environment to each API. Team-shared variables with personal secrets that stay local.
-- **MQTT built-in** — connect to brokers, subscribe, publish, and monitor messages alongside your HTTP workflow.
-- **WebSocket built-in** — create WS connections, connect/disconnect, send payloads, and inspect inbound/outbound messages.
+- **Team-ready** — share collections via source control and review requests in PRs.
+- **Focused UX** — HTTP-only scope in v2.0.0 for maximum stability and low onboarding friction.
 - **Works where you code** — VS Code, Cursor, Windsurf, and other VS Code-based IDEs.
 
 ## Key features
 
 ### HTTP
 
-- Manage multiple APIs inside `.requestsflow/`.
-- Organize endpoints by folders and collections.
+- Treat each API as a managed root directory.
+- Organize HTTP requests inside `requests/` with folders by controller or feature.
 - Send requests with `GET`, `POST`, `PUT`, `PATCH`, `DELETE`.
 - Configure headers, params, body, and auth (`Bearer`, `Basic`, `API Key`).
 - View response: status, headers, body (with collapsible JSON tree view), time, size, and cURL export.
@@ -52,28 +55,11 @@ RequestFlow keeps your HTTP requests as native `.http` files in your repository,
 - Keep an in-session response history (last 20 executions per request block).
 - Optional migration helpers: import REST Client environments and centralize standalone files.
 
-### Environments
+### Module roadmap note
 
-- Global, per-API, and personal environments with reusable variables.
-- Variable interpolation with `{{variable}}` syntax.
-- Per-API environment selection — assign a different active environment to each API with global fallback.
-- Private environments (gitignored) for secrets and local overrides — each team member maintains their own.
-- File watcher auto-refreshes variables across open tabs when environment files change.
-- Switch active environment from the status bar or inline from the request editor.
-
-### MQTT
-
-- Create brokers inline from the MQTT home panel — no multi-step wizard needed.
-- Subscribe to topics with wildcard support (`+`, `#`).
-- Publish messages with JSON, XML, YAML, or raw payloads.
-- Real-time message log with high-contrast bubbles and topic tree visualization.
-
-### WebSocket
-
-- Dedicated WebSocket home panel with connection overview and inline creation.
-- Configure URL, headers, and initial message per connection.
-- Connect, disconnect, send payloads, and inspect inbound/outbound/system messages.
-- Filter and clear messages from the integrated WS session panel.
+- Environments return in v2.1.0.
+- WebSocket returns in v2.3.0.
+- MQTT returns in v2.4.0.
 
 ### LLM Integration
 
@@ -91,9 +77,9 @@ RequestFlow keeps your HTTP requests as native `.http` files in your repository,
 
 1. Open a workspace folder in your IDE.
 2. Open **RequestFlow** in the sidebar.
-3. Click **Initialize RequestFlow** to create `.requestsflow/`.
-4. Add APIs, create requests, and select an environment.
-5. Click **Generate LLM docs** to let your AI agent understand your project.
+3. Click **Initialize RequestFlow** to create your first API root.
+4. Add API roots and create requests inside `requests/`.
+5. Send requests and iterate directly from the HTTP panel.
 
 Tip: you can change the managed root with the `requestflow.rootDirectory` setting.
 
@@ -121,27 +107,32 @@ Tip: you can change the managed root with the `requestflow.rootDirectory` settin
 
 ## Project structure
 
+Simple repo example:
+
 ```plaintext
 <requestflow-root>/                   # default: .requestsflow (configurable)
-├── environments/
-│   └── local.env.json
-├── personal-environments/          # private (gitignored)
-├── _mqtt/
-│   └── my-broker.mqtt.json
-├── llm/                            # generated for AI agents
-│   ├── llm.md
-│   ├── http.llm.md
-│   ├── mqtt.llm.md
-│   ├── ws.llm.md
-│   └── environments.llm.md
-├── _websocket/
-│   └── echo-test.ws
-├── <api>/
-│   ├── _environments/
-│   └── <folders>/<request>.http
-├── .gitignore
-└── settings.json
+├── settings.json
+├── requests/
+│   └── list-all.http
+└── .gitignore
 ```
+
+Monorepo example:
+
+```plaintext
+.requestsflow/                      # optional shared root
+├── settings.json
+└── requests/
+
+apps/payments/.requestsflow/
+├── settings.json
+├── requests/
+│   └── orders/
+│       └── create.http
+└── .gitignore
+```
+
+Folders inside `requests/` are only organization. They are not APIs.
 
 ## UI patterns (internal)
 

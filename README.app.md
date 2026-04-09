@@ -78,8 +78,9 @@ RequestFlow keeps your HTTP requests as native `.http` files in your repository.
 1. Open a workspace folder in your IDE.
 2. Open **RequestFlow** in the sidebar.
 3. Click **Initialize RequestFlow** to create your first API root.
-4. Add API roots and create requests inside `requests/`.
-5. Send requests and iterate directly from the HTTP panel.
+4. Use the sidebar title actions: **+ API** to add roots, **+ Request** to create requests in the selected API or folder.
+5. Open a request from the sidebar tree to edit and send it.
+6. Use the **?** icon in the sidebar title to revisit the quick guide.
 
 Tip: you can change the managed root with the `requestflow.rootDirectory` setting.
 

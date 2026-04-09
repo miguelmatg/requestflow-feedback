@@ -79,8 +79,9 @@ RequestFlow guarda tus requests HTTP como archivos `.http` nativos en tu reposit
 1. Abre una carpeta de workspace en tu IDE.
 2. Abre **RequestFlow** en la barra lateral.
 3. Haz clic en **Inicializar RequestFlow** para crear tu primera raíz de API.
-4. Agrega raíces de API y crea requests dentro de `requests/`.
-5. Envía requests y itera directamente desde el panel HTTP.
+4. Usa las acciones del título del sidebar: **+ API** para agregar raíces, **+ Request** para crear requests en la API o carpeta seleccionada.
+5. Abre una request desde el árbol del sidebar para editarla y enviarla.
+6. Usa el icono **?** en el título del sidebar para revisar la guía rápida.
 
 Tip: puedes cambiar la raíz gestionada con la configuración `requestflow.rootDirectory`.
 

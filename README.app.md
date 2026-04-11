@@ -9,18 +9,18 @@
 </p>
 # RequestFlow
 
-**Your API client that lives inside your project and works with your AI agent.**
+**Your project-native API client for VS Code.**
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/miguelmatg/requestflow-feedback/main/assets/preview.jpg" alt="RequestFlow Preview" width="800" />
 </p>
 
-RequestFlow keeps your HTTP requests as native `.http` files in your repository. Your coding agent can read that structure and generate, update, or complete requests automatically — no copy-paste, no external tools.
+RequestFlow keeps your HTTP requests as native `.http` files in your repository. Organize, send, and inspect your requests without leaving your editor — no external tools needed.
 
 ## Release status
 
-- v2.0.0 is a focused HTTP-only release.
-- MQTT, WebSocket, and Environments UI are intentionally hidden in this version and return in later phases.
+- v2.0.3 — HTTP-focused release with a redesigned response viewer, drag & drop, and binary response preview.
+- MQTT, WebSocket, and Environments UI are intentionally hidden and return in later phases.
 
 ## Public README (all languages)
 
@@ -29,11 +29,10 @@ RequestFlow keeps your HTTP requests as native `.http` files in your repository.
 
 ## Why RequestFlow?
 
-- **Project-native** — each API root stores plain `.http` files plus its own RequestFlow structure inside your repo. Version it, share it, review it in PRs.
-- **LLM-ready** — generate structured docs that your AI agent reads to understand your APIs, then let it create or update requests by controller.
+- **Project-native** — each API root stores plain `.http` files inside your repo. Version it, share it, review it in PRs.
 - **Zero context switching** — send and inspect HTTP requests without leaving your editor.
 - **Team-ready** — share collections via source control and review requests in PRs.
-- **Focused UX** — HTTP-only scope in v2.0.0 for maximum stability and low onboarding friction.
+- **Focused UX** — HTTP-only scope for maximum stability and low onboarding friction.
 - **Works where you code** — VS Code, Cursor, Windsurf, and other VS Code-based IDEs.
 
 ## Key features
@@ -41,19 +40,23 @@ RequestFlow keeps your HTTP requests as native `.http` files in your repository.
 ### HTTP
 
 - Treat each API as a managed root directory.
-- Organize HTTP requests inside `requests/` with folders by controller or feature.
+- Organize HTTP requests inside `http/` with folders by controller or feature.
+- Drag & drop requests and folders to reorganize your collection.
+- Multi-select items in the sidebar and delete them in a single action.
 - Send requests with `GET`, `POST`, `PUT`, `PATCH`, `DELETE`.
 - Configure headers, params, body, and auth (`Bearer`, `Basic`, `API Key`).
-- View response: status, headers, body (with collapsible JSON tree view), time, size, and cURL export.
-- Always-visible response pane — no context switch when sending requests.
+- Response viewer with collapsible JSON tree (syntax-colored), formatted XML/HTML with line numbers, and raw view.
+- Image preview tab for binary responses (`image/*`) with automatic detection.
+- Content-type selector (JSON/XML/HTML/Text/Auto) to control Pretty formatting.
+- Status code, response time, size, cookies, and headers displayed in a tabbed layout.
+- Collapsible response panel — always visible, no context switch when sending requests.
+- cURL export from the Debug tab.
 
 ### HTTP compatibility mode (.http/.rest)
 
 - Open and execute requests directly from `.http` and `.rest` files with inline CodeLens.
 - Parse multi-request files with `###` blocks and execute by block.
 - Use standalone mode for files outside the managed root directory.
-- Keep an in-session response history (last 20 executions per request block).
-- Optional migration helpers: import REST Client environments and centralize standalone files.
 
 ### Module roadmap note
 
@@ -61,17 +64,13 @@ RequestFlow keeps your HTTP requests as native `.http` files in your repository.
 - WebSocket returns in v2.3.0.
 - MQTT returns in v2.4.0.
 
-### LLM Integration
+## What's next
 
-- One-click generation of structured docs in `.requestsflow/llm/`.
-- Your AI agent reads these docs to understand your API structure, naming conventions, and environments.
-- Suggested prompt included: point it at a controller and let it generate all related requests.
-- Docs are auto-generated and auto-maintained — no manual updates needed.
+**v2.1.0 — Environments**: Full environment support with per-API and global variable scopes, inline variable resolution, and an environment selector in the request editor.
 
 ## Requirements
 
-- VS Code `^1.95.0` (or a compatible VS Code-based IDE).
-- Node.js 20+ and npm for local development.
+- VS Code `^1.95.0` (or a compatible VS Code-based IDE: Cursor, Windsurf, VSCodium, etc.).
 
 ## Quick start
 
@@ -82,64 +81,39 @@ RequestFlow keeps your HTTP requests as native `.http` files in your repository.
 5. Open a request from the sidebar tree to edit and send it.
 6. Use the **?** icon in the sidebar title to revisit the quick guide.
 
-Tip: you can change the managed root with the `requestflow.rootDirectory` setting.
-
-## Multi-root operations guide
-
-- Keep managed HTTP roots explicit with `requestflow.http.managedRoots` so teams and IDEs share the same boundaries.
-- Use standalone mode only for discovery and ad-hoc runs; standalone files do not load RequestFlow environments.
-- If a standalone request contains `{{variable}}` placeholders, RequestFlow blocks execution until the file is migrated to a managed root.
-- Use **RequestFlow: Centralize Standalone Requests** to migrate with `copy` or `move` and review the preview before applying.
-- Use **RequestFlow: Undo Last Standalone Centralization** if the latest migration needs rollback.
-
-### Safety and rollback behavior
-
-- RequestFlow stores the latest centralization manifest at `.requestsflow/_migration/last-centralization.json`.
-- Undo is conflict-aware and can be partial:
-  - `move`: restores files only when target content is unchanged and source does not exist.
-  - `copy`: removes generated targets only when content still matches the migration hash.
-- When conflicts exist, undo keeps the manifest so users can inspect and resolve remaining files manually.
-
-### Performance best practices
-
-- Keep managed roots under a shared base path when possible to let optimized watcher mode reduce file-system load.
-- Prefer fewer high-signal roots over many fragmented roots.
-- Keep generated or vendor folders outside managed roots to avoid unnecessary watcher churn.
+Tip: each root can be any folder in your workspace — the default is `.requestsflow/`, but you can choose `http`, `src/api`, or any other name.
 
 ## Project structure
 
-Simple repo example:
+A root is any folder you choose. You can place `.http` files directly inside it or use subfolders to organize.
+
+Simple repo:
 
 ```plaintext
-<requestflow-root>/                   # default: .requestsflow (configurable)
-├── settings.json
-├── requests/
-│   └── list-all.http
-└── .gitignore
+my-project/
+├── requestflow.config.json        # API roots configuration
+└── http/                          # root named "http" (you pick the name)
+    ├── users/
+    │   ├── list-all.http
+    │   └── create.http
+    └── orders/
+        └── get-by-id.http
 ```
 
-Monorepo example:
+Monorepo with multiple roots:
 
 ```plaintext
-.requestsflow/                      # optional shared root
-├── settings.json
-└── requests/
-
-apps/payments/.requestsflow/
-├── settings.json
-├── requests/
-│   └── orders/
-│       └── create.http
-└── .gitignore
+my-monorepo/
+├── requestflow.config.json        # declares multiple roots
+├── src/api/                       # root: "Backend API"
+│   └── users/
+│       └── list.http
+└── apps/payments/http/            # root: "Payments"
+    └── orders/
+        └── create.http
 ```
 
-Folders inside `requests/` are only organization. They are not APIs.
-
-## UI patterns (internal)
-
-- Real-time message bubble pattern (MQTT/WS/Kafka/AMQP future): [docs/ui-message-pattern.md](./docs/ui-message-pattern.md)
-
-This guideline is the reference for keeping direction, colors, and bubble composition consistent across all messaging modules.
+Subfolders inside a root are only for organization. They are not separate APIs.
 
 ## Feedback and Issues
 

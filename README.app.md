@@ -19,8 +19,8 @@ RequestFlow keeps your HTTP requests as native `.http` files in your repository.
 
 ## Release status
 
-- v2.0.3 — HTTP-focused release with a redesigned response viewer, drag & drop, and binary response preview.
-- MQTT, WebSocket, and Environments UI are intentionally hidden and return in later phases.
+- v2.2.0 — Environments module re-enabled with a fixed 3-layer variable model (Global, Per-API, Personal).
+- MQTT and WebSocket UI are intentionally hidden and return in later phases.
 
 ## Public README (all languages)
 
@@ -52,6 +52,17 @@ RequestFlow keeps your HTTP requests as native `.http` files in your repository.
 - Collapsible response panel — always visible, no context switch when sending requests.
 - cURL export from the Debug tab.
 
+### Environments
+
+- **3-layer variable model**: Global → Per-API → Personal, with automatic resolution based on request location.
+- Global and per-API variables stored in `requestflow.config.json`. Personal variables stored in VS Code workspace state (never committed).
+- Environment tree view in the sidebar showing all scopes with item counts.
+- Table-based environment editor with enable/disable toggles and override hints.
+- Rich hover tooltips in `.http` files and the webview URL bar: source badge, resolved value, override info, and Ctrl+Click navigation.
+- Click a variable or the API badge to jump directly to the environment editor.
+- Status bar button for quick access to environment management.
+- Resolver cache auto-invalidates when `requestflow.config.json` changes.
+
 ### HTTP compatibility mode (.http/.rest)
 
 - Open and execute requests directly from `.http` and `.rest` files with inline CodeLens.
@@ -60,13 +71,12 @@ RequestFlow keeps your HTTP requests as native `.http` files in your repository.
 
 ### Module roadmap note
 
-- Environments return in v2.1.0.
 - WebSocket returns in v2.3.0.
 - MQTT returns in v2.4.0.
 
 ## What's next
 
-**v2.1.0 — Environments**: Full environment support with per-API and global variable scopes, inline variable resolution, and an environment selector in the request editor.
+**v2.3.0 — SSE (Server-Sent Events)**: Stream real-time events over HTTP with connect/disconnect, auto-reconnect, and message log. First extension of the unified multi-protocol tree.
 
 ## Requirements
 
@@ -91,7 +101,7 @@ Simple repo:
 
 ```plaintext
 my-project/
-├── requestflow.config.json        # API roots configuration
+├── requestflow.config.json        # API roots + environment variables
 └── http/                          # root named "http" (you pick the name)
     ├── users/
     │   ├── list-all.http
@@ -104,7 +114,7 @@ Monorepo with multiple roots:
 
 ```plaintext
 my-monorepo/
-├── requestflow.config.json        # declares multiple roots
+├── requestflow.config.json        # declares multiple roots + environments
 ├── src/api/                       # root: "Backend API"
 │   └── users/
 │       └── list.http
@@ -112,6 +122,26 @@ my-monorepo/
     └── orders/
         └── create.http
 ```
+
+Environment variables in `requestflow.config.json`:
+
+```json
+{
+  "roots": [...],
+  "environments": {
+    "global": [
+      { "key": "BASE_URL", "value": "https://api.example.com", "enabled": true }
+    ],
+    "apis": {
+      "http": [
+        { "key": "API_KEY", "value": "dev-key-123", "enabled": true }
+      ]
+    }
+  }
+}
+```
+
+Personal variables (secrets, local config) are stored in VS Code workspace state and never appear in version control.
 
 Subfolders inside a root are only for organization. They are not separate APIs.
 

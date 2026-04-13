@@ -20,8 +20,8 @@ RequestFlow guarda tus requests HTTP como archivos `.http` nativos en tu reposit
 
 ## Estado del release
 
-- v2.0.3 — Versión enfocada en HTTP con visor de respuestas rediseñado, drag & drop y previsualización de respuestas binarias.
-- MQTT, WebSocket y la UI de Entornos están ocultos intencionalmente y regresan en fases siguientes.
+- v2.2.0 — Módulo de Entornos re-habilitado con modelo fijo de 3 capas (Global, Por-API, Personal).
+- MQTT y WebSocket están ocultos intencionalmente y regresan en fases siguientes.
 
 ## README publico (todos los idiomas)
 
@@ -53,6 +53,17 @@ RequestFlow guarda tus requests HTTP como archivos `.http` nativos en tu reposit
 - Panel de respuesta colapsable — siempre visible, sin cambio de contexto al enviar requests.
 - Exportación cURL desde la pestaña Debug.
 
+### Entornos
+
+- **Modelo de 3 capas**: Global → Por-API → Personal, con resolución automática según la ubicación del request.
+- Variables globales y por-API almacenadas en `requestflow.config.json`. Variables personales en el estado del workspace de VS Code (nunca se commitean).
+- Vista de árbol de entornos en el sidebar mostrando todos los scopes con conteo de elementos.
+- Editor de entornos basado en tabla con toggles de activar/desactivar e indicadores de override.
+- Tooltips enriquecidos en archivos `.http` y en la barra de URL del webview: badge de origen, valor resuelto, info de override y navegación con Ctrl+Clic.
+- Clic en una variable o en el badge de API para saltar directamente al editor de entornos.
+- Botón en la barra de estado para acceso rápido a la gestión de entornos.
+- La caché del resolver se invalida automáticamente cuando cambia `requestflow.config.json`.
+
 ### Modo de compatibilidad HTTP (.http/.rest)
 
 - Abre y ejecuta requests directamente desde archivos `.http` y `.rest` con CodeLens inline.
@@ -61,13 +72,12 @@ RequestFlow guarda tus requests HTTP como archivos `.http` nativos en tu reposit
 
 ### Nota de roadmap de modulos
 
-- Entornos vuelve en v2.1.0.
 - WebSocket vuelve en v2.3.0.
 - MQTT vuelve en v2.4.0.
 
 ## Próxima mejora
 
-**v2.1.0 — Entornos**: Soporte completo de entornos con scopes de variables por API y globales, resolución inline de variables y selector de entorno en el editor de requests.
+**v2.3.0 — SSE (Server-Sent Events)**: Streaming de eventos en tiempo real sobre HTTP con connect/disconnect, auto-reconnect y log de mensajes. Primera extensión del árbol unificado multi-protocolo.
 
 ## Requisitos
 
@@ -92,7 +102,7 @@ Repo simple:
 
 ```plaintext
 my-project/
-├── requestflow.config.json        # configuración de raíces de API
+├── requestflow.config.json        # configuración de raíces de API + variables de entorno
 └── http/                          # raíz llamada "http" (tú eliges el nombre)
     ├── users/
     │   ├── list-all.http
@@ -105,7 +115,7 @@ Monorepo con múltiples raíces:
 
 ```plaintext
 my-monorepo/
-├── requestflow.config.json        # declara múltiples raíces
+├── requestflow.config.json        # declara múltiples raíces + entornos
 ├── src/api/                       # raíz: "Backend API"
 │   └── users/
 │       └── list.http
@@ -113,6 +123,26 @@ my-monorepo/
     └── orders/
         └── create.http
 ```
+
+Variables de entorno en `requestflow.config.json`:
+
+```json
+{
+  "roots": [...],
+  "environments": {
+    "global": [
+      { "key": "BASE_URL", "value": "https://api.example.com", "enabled": true }
+    ],
+    "apis": {
+      "http": [
+        { "key": "API_KEY", "value": "dev-key-123", "enabled": true }
+      ]
+    }
+  }
+}
+```
+
+Las variables personales (secretos, config local) se almacenan en el estado del workspace de VS Code y nunca aparecen en control de versiones.
 
 Las subcarpetas dentro de una raíz solo organizan. No son APIs separadas.
 
